@@ -18,6 +18,18 @@
         "toast",
         "ui"
     ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/IrtizaNasar/electron-dynamic-island.git"
+    },
+    "files": [
+        "index.js",
+        "index.d.ts",
+        "lib/",
+        "scripts/",
+        "LICENSE",
+        "README.md"
+    ],
     "author": "Irtiza Nasar",
     "license": "MIT",
     "peerDependencies": {
