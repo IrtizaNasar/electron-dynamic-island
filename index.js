@@ -39,6 +39,15 @@ class DynamicIsland {
     }
 
     /**
+     * Checks if the Dynamic Island is supported on the current setup.
+     * Returns true if the Mac has a notch AND the internal display is active.
+     * Use this to determine if you should show a Dynamic Island notification or a fallback.
+     */
+    isSupported() {
+        return this.hasNotch() && !!this.getInternalDisplay();
+    }
+
+    /**
      * Initializes the Dynamic Island.
      * Should be called after app 'ready' event.
      */
@@ -189,7 +198,7 @@ class DynamicIsland {
      * @param {Object} options
      * @param {string} options.type - 'success', 'error', 'info', 'warning'
      * @param {string} options.message - The text to display
-     * @param {string} options.icon - Optional SVG string or 'bluetooth' preset
+     * @param {string} options.icon - Optional SVG string or preset ('check', 'usb-c', 'bluetooth', etc.)
      */
     show({
         type = 'success',

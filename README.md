@@ -108,7 +108,22 @@ island.show({
 });
 ```
 
-### 3. Advanced Usage
+### 3. Best Practice: Check Support
+Since the Dynamic Island only works on MacBooks with a notch **and** on the internal display, you should check for support before triggering it. If not supported, fallback to a standard Electron notification.
+
+```javascript
+if (island.isSupported()) {
+    island.show({
+        type: 'success',
+        message: 'Connected'
+    });
+} else {
+    // Fallback for older Macs, external displays, or Windows/Linux
+    new Notification({ title: 'Connected', body: 'Device connected successfully' }).show();
+}
+```
+
+### 4. Advanced Usage
 
 #### Triggering on Events
 You can hook the island into any Electron event or your own application logic.
@@ -119,7 +134,7 @@ ipcMain.on('download-complete', (event, fileName) => {
     island.show({
         type: 'success',
         message: `${fileName} Downloaded`,
-        icon: 'check'
+        icon: 'usb-c'
     });
 });
 
@@ -150,14 +165,13 @@ island.show({
 setTimeout(() => {
     island.show({
         type: 'success',
-        message: 'Connected',
-        icon: 'check'
+        message: 'Connected'
     });
 }, 2000);
 
 ```
 
-### 4. Animations
+### 5. Animations
 
 The library includes several native-feeling animations for the icon. Pass the name to the `animation` option in `show()`.
 
@@ -173,7 +187,7 @@ The library includes several native-feeling animations for the icon. Pass the na
 
 
 
-### 5. Customization
+### 6. Customization
 
 You can fine-tune the look to match your app's design. If you don't provide these values, the library uses native macOS defaults.
 
@@ -196,7 +210,7 @@ island.show({
 });
 ```
 
-### 6. Built-in Icons
+### 7. Built-in Icons
 
 The library comes with a set of polished, native-style SVG icons. You can use them by passing their name to the `icon` property.
 
@@ -204,7 +218,8 @@ The library comes with a set of polished, native-style SVG icons. You can use th
 
 | Icon Name | Description |
 | :--- | :--- |
-| `check` | A rounded rectangle with a checkmark (default for `success`). |
+| `check` | A bold checkmark (default for `success`). |
+| `usb-c` | A minimalist USB-C port symbol. |
 | `x` | A crisp X symbol (default for `error`). |
 | `warning` | A standard warning triangle. |
 | `info` | A circle with an 'i'. |
@@ -218,7 +233,7 @@ island.show({
 });
 ```
 
-### 7. Notification Types
+### 8. Notification Types
 
 The `type` option determines the default color, icon, and sound for the notification.
 
@@ -242,6 +257,9 @@ The `type` option determines the default color, icon, and sound for the notifica
 | `sizing` | `object` | `{ type: 'fixed' }` | Default sizing configuration. |
 | `debug` | `boolean` | `false` | Log internal debug messages to the console. |
 | `devMode` | `boolean` | `false` | Show a red dashed boundary around the window for visual debugging. |
+
+### `island.isSupported()`
+Returns `true` if the app is running on a Mac with a notch **and** the internal display is active. Use this to determine whether to show the Dynamic Island or a fallback notification.
 
 ### `island.show(options)`
 

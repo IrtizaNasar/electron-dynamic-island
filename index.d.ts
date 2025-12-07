@@ -2,7 +2,7 @@ import { BrowserWindow } from 'electron';
 
 export interface DynamicIslandOptions {
     /**
-     * Path to a default icon, SVG string, or preset name ('bluetooth', 'check', 'x', 'warning', 'info').
+     * Path to a default icon, SVG string, or preset name ('bluetooth', 'check', 'usb-c', 'x', 'warning', 'info').
      */
     icon?: string;
     /**
@@ -145,6 +145,12 @@ export class DynamicIsland {
      * Checks if the current Mac has a physical notch.
      */
     hasNotch(): boolean;
+
+    /**
+     * Checks if the Dynamic Island is supported on the current setup.
+     * Returns true if the Mac has a notch AND the internal display is active.
+     */
+    isSupported(): boolean;
 
     /**
      * Initializes the Dynamic Island. Should be called after app 'ready'.
