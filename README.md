@@ -199,7 +199,7 @@ island.show({
 
 ### 6. Built-in Icons
 
-The library comes with a set of authentic, native-style SVG icons. You can use them by passing their name to the `icon` property.
+The library comes with a set of polished, native-style SVG icons. You can use them by passing their name to the `icon` property.
 
 ![Built-in Icons Preview](icons_preview.svg)
 
