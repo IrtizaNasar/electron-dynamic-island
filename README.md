@@ -199,7 +199,7 @@ island.show({
 
 ### 6. Built-in Icons
 
-The library comes with a set of polished, native-style SVG icons. You can use them by passing their name to the `icon` property.
+The library comes with a set of authentic, native-style SVG icons. You can use them by passing their name to the `icon` property.
 
 ![Built-in Icons Preview](icons_preview.svg)
 
@@ -329,7 +329,7 @@ Visually, it creates the illusion of the notch "expanding" by drawing a seamless
 
 ### Origin
 
-The core logic for this library was originally developed for [Serial Bridge](https://github.com/IrtizaNasar/SerialBridge) to handle **device connection and disconnection status updates**. When I couldn't find any existing solution to achieve this effect in Electron, I built it from scratch. After extensive testing and refinement within that application, I decided to extract, polish, and expand the functionality into this standalone library to help other Electron developers build premium, native-feeling experiences.
+The core logic for this library was originally developed for [Serial Bridge](https://github.com/IrtizaNasar/SerialBridge) to handle **device connection and disconnection status updates**. When I couldn't find any existing solution to achieve this effect in Electron, I built it from scratch. After extensive testing and refinement within that application, I decided to extract, polish, and expand the functionality into this standalone library to help other Electron developers build buttery smooth, native experiences.
 
 ## Running Examples
 
