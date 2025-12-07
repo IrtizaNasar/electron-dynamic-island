@@ -2,13 +2,12 @@ import { BrowserWindow } from 'electron';
 
 export interface DynamicIslandOptions {
     /**
-     * Path to a custom icon (PNG/JPG/SVG) or a preset name like 'bluetooth'.
+     * Path to a default icon, SVG string, or preset name ('bluetooth', 'check', 'x', 'warning', 'info').
      */
     icon?: string;
-
     /**
      * Custom sound paths for different notification types.
-     * Example: { success: '/path/to/success.mp3', error: '/path/to/error.mp3' }
+     * Example: { success: '/path/to/success.wav', error: '/path/to/error.mp3' }
      */
     sounds?: {
         success?: string;
@@ -17,71 +16,59 @@ export interface DynamicIslandOptions {
         warning?: string;
         [key: string]: string | undefined;
     };
-
     /**
-     * Enable or disable built-in sound effects. Default: true.
+     * Enable or disable sound effects. Default: true.
      */
     enableSounds?: boolean;
-
     /**
-     * Enable development mode to show the window boundary. Default: false.
+     * Show the window boundary for debugging. Default: false.
      */
     devMode?: boolean;
-
     /**
-     * Enable debug logging. Default: false.
+     * Enable detailed logging. Default: false.
      */
     debug?: boolean;
-
     /**
      * Default sizing configuration.
      */
-    sizing?: SizingConfig;
-
+    sizing?: SizingOptions;
     /**
-     * Default icon size (width and height) in pixels.
+     * Default size for icons (width and height) in pixels.
      */
     iconSize?: number;
-
     /**
-     * Default icon width in pixels.
+     * Default width for icons in pixels.
      */
     iconWidth?: number;
-
     /**
-     * Default icon height in pixels.
+     * Default height for icons in pixels.
      */
     iconHeight?: number;
-
     /**
      * Default gap between icon and text in pixels.
      */
     iconGap?: number;
 }
 
-export interface SizingConfig {
+export interface SizingOptions {
     /**
-     * Sizing mode: 'fixed' or 'dynamic'. Default: 'fixed'.
+     * 'fixed' (default) or 'dynamic'.
      */
     type?: 'fixed' | 'dynamic';
-
     /**
      * Allow height to expand in dynamic mode. Default: false.
      */
     height?: boolean;
-
     /**
      * Allow width to expand in dynamic mode. Default: false.
      */
     width?: boolean;
-
     /**
-     * Override detected notch height in pixels.
+     * Override detected notch height. Default: 40.
      */
     notchHeight?: number;
-
     /**
-     * Fine-tune vertical position in pixels.
+     * Vertical offset in pixels. Default: 0.
      */
     verticalOffset?: number;
 }
@@ -89,76 +76,64 @@ export interface SizingConfig {
 export interface ShowOptions {
     /**
      * Notification type. Determines default color and icon.
+     * 'success' | 'error' | 'info' | 'warning'
      */
     type?: 'success' | 'error' | 'info' | 'warning';
-
     /**
      * The message text to display.
      */
     message: string;
-
     /**
-     * Path to a custom icon or a preset name.
+     * Override the default icon.
      */
     icon?: string;
-
     /**
-     * Size of the icon (width and height) in pixels.
+     * Size of the icon (width & height) in pixels.
      */
     iconSize?: number;
-
     /**
-     * Width of the icon in pixels. Overrides iconSize.
+     * Width of the icon in pixels.
      */
     iconWidth?: number;
-
     /**
-     * Height of the icon in pixels. Overrides iconSize.
+     * Height of the icon in pixels.
      */
     iconHeight?: number;
-
     /**
      * Gap between icon and text in pixels.
      */
     iconGap?: number;
-
     /**
-     * Override sizing configuration for this notification.
+     * Override the default sizing options for this notification.
      */
-    sizing?: SizingConfig;
-
+    sizing?: SizingOptions;
     /**
      * Duration in milliseconds before auto-hiding. Default: 4500.
      */
     duration?: number;
-
     /**
-     * Font family for the message text.
+     * Custom font family.
      */
     fontFamily?: string;
-
     /**
-     * Font size for the message text (e.g., '14px').
+     * Custom font size (e.g., '14px').
      */
     fontSize?: string;
-
     /**
-     * Custom text color (hex, rgb, or name).
+     * Custom text/icon color (hex code).
      */
     color?: string;
-
     /**
-     * Animation type for the icon.
+     * Animation type.
+     * 'pop-in' | 'slide' | 'fade' | 'shake' | 'pulse' | 'bounce' | 'spin' | 'wobble' | 'none'
      */
-    animation?: 'pulse' | 'bounce' | 'spin' | 'wobble' | 'fade' | 'slide';
-
+    animation?: 'pop-in' | 'slide' | 'fade' | 'shake' | 'pulse' | 'bounce' | 'spin' | 'wobble' | 'none' | string;
     /**
-     * Path to a custom sound file to play.
+     * Enable or disable the glow effect. Default: true (based on type).
      */
-    soundFile?: string;
-
+    glow?: boolean;
     /**
-     * Override devMode for this notification.
+     * Show debug boundary for this notification.
      */
     devMode?: boolean;
 }
@@ -167,12 +142,12 @@ export class DynamicIsland {
     constructor(options?: DynamicIslandOptions);
 
     /**
-     * The Electron BrowserWindow instance.
+     * Checks if the current Mac has a physical notch.
      */
-    window: BrowserWindow | null;
+    hasNotch(): boolean;
 
     /**
-     * Initializes the Dynamic Island. Should be called after the app is ready.
+     * Initializes the Dynamic Island. Should be called after app 'ready'.
      */
     init(): void;
 
