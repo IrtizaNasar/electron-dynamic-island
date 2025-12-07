@@ -11,7 +11,7 @@
 <h1 align="center">Electron Dynamic Island</h1>
 
 <p align="center">
-  A professional, robust, and highly customizable "Dynamic Island" notification system for Electron apps on macOS. Designed to integrate seamlessly with the hardware notch on modern MacBooks, providing a native-like experience.
+  A robust, and highly customizable "Dynamic Island" style notification system for Electron apps on macOS. Designed to integrate seamlessly with the hardware notch on modern MacBooks, providing a native-like experience.
 </p>
 
 ## Table of Contents
