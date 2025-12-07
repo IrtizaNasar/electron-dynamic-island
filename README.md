@@ -2,13 +2,12 @@
   <img src="logo.svg" alt="Electron Dynamic Island Logo" width="200">
 </p>
 
+<h1 align="center">Electron Dynamic Island</h1>
 <p align="center">
   <a href="https://www.npmjs.com/package/electron-dynamic-island">
     <img src="https://img.shields.io/npm/v/electron-dynamic-island?style=flat-square&color=007AFF" alt="npm version" />
   </a>
 </p>
-
-<h1 align="center">Electron Dynamic Island</h1>
 
 <p align="center">
   A robust, and highly customizable "Dynamic Island" style notification system for Electron apps on macOS. Designed to integrate seamlessly with the hardware notch on modern MacBooks, providing a native-like experience.
