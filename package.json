@@ -1,6 +1,6 @@
 {
     "name": "electron-dynamic-island",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A robust, drop-in Dynamic Island notification system for macOS Electron apps.",
     "main": "index.js",
     "types": "index.d.ts",
