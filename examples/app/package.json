@@ -1,0 +1,14 @@
+{
+  "name": "island-test-app",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron-dynamic-island": "file:.."
+  },
+  "devDependencies": {
+    "electron": "^28.0.0"
+  }
+}

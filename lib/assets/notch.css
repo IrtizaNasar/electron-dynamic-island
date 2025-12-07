@@ -1,0 +1,519 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: transparent !important;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none !important;
+    /* CRITICAL: Ensure clicks pass through */
+}
+
+.notch {
+    /* Pure black to blend seamlessly with hardware notch */
+    background-color: #000000;
+
+    /* Smooth squircle-like rounding */
+    /* "Dynamic Island" Physics - Snappy & Fluid (Apple-like) */
+    /* cubic-bezier(0.16, 1, 0.3, 1) = Ease Out Expo-ish, very responsive */
+    transition:
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        border-radius 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        padding 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* Hidden by default */
+
+    /* Remove the flat border */
+    border: none;
+    outline: none;
+
+    /* Optimize rendering */
+    will-change: transform, opacity, width, height, border-radius;
+    box-sizing: border-box;
+}
+
+/* Dev Mode - Visualizes the window boundary */
+.notch.dev-mode {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 1px red;
+    /* Clearly visible boundary */
+}
+
+/* Collapsed State (Hidden/Tiny) */
+.notch.collapsed {
+    /* Slightly smaller than physical notch to hide inside it */
+    width: 140px;
+    height: 30px;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+
+    /* Tighter curve to match actual hardware corners */
+    border-radius: 0 0 12px 12px;
+
+    box-shadow: none;
+}
+
+/* Expanded State (Notification) */
+.notch.expanded {
+    width: auto;
+    min-width: 300px;
+    max-width: 400px;
+    height: 100px;
+    /* Increased to accommodate notch clearance */
+    opacity: 1;
+    transform: translateY(0) scale(1);
+
+    /* Balanced curvature for expanded state */
+    border-radius: 0 0 20px 20px;
+
+    margin-top: 0;
+
+    /* Center content with offset to clear hardware notch */
+    align-items: center;
+    padding-top: 38px;
+    /* Hardware notch clearance (40px - 2px adjustment) */
+    padding-bottom: 0;
+
+    /* Allow shadows to extend beyond bounds */
+    overflow: visible;
+
+    /* Premium 3-layer shadow system */
+    box-shadow:
+        /* Ambient shadow - soft and diffused */
+        0 20px 50px -12px rgba(0, 0, 0, 0.5),
+        /* Direct shadow - medium spread */
+        0 8px 20px -4px rgba(0, 0, 0, 0.4),
+        /* Contact shadow - tight and dark */
+        0 2px 8px -2px rgba(0, 0, 0, 0.6);
+}
+
+/* Dynamic Mode: Padding is calculated and set via JS for perfect alignment */
+.notch.expanded.dynamic-mode {
+    /* Styles handled by JS */
+}
+
+/* The "Melted" Connection (Inverted Border Radius) */
+.notch.expanded::before,
+.notch.expanded::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    z-index: -1;
+    /* Smooth transition for the melt effect */
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+/* Left Melt */
+.notch.expanded::before {
+    left: -20px;
+    /* Radial gradient to create the concave curve */
+    background: radial-gradient(circle at 0 100%, transparent 20px, #000000 21px);
+}
+
+/* Right Melt */
+.notch.expanded::after {
+    right: -20px;
+    background: radial-gradient(circle at 100% 100%, transparent 20px, #000000 21px);
+}
+
+/* Hide melts when collapsed */
+.notch.collapsed::before,
+.notch.collapsed::after {
+    opacity: 0;
+}
+
+.notch-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 0 24px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    opacity: 0;
+    /* transform: scale(0.9); Removed to prevent stretching artifact */
+
+    /* Exit Animation: Smooth fade out matching container collapse */
+    transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.notch.expanded .notch-content {
+    opacity: 1;
+    /* transform: scale(1); */
+
+    /* Enter Animation: Snappy pop-in with slight delay */
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: 0.1s;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    max-width: 80px;
+    /* Prevent oversized icons from breaking layout */
+    max-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    overflow: hidden;
+    /* Clip oversized content */
+}
+
+.icon svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.5px;
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.message {
+    /* Pure white for maximum contrast and clarity */
+    color: #FFFFFF;
+
+    /* Apple's standard notification text size */
+    font-size: 14px;
+
+    /* Semibold for better readability and premium feel */
+    font-weight: 600;
+
+    /* Prevent text wrapping and handle overflow */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* Allow text to shrink to maintain padding */
+    flex-shrink: 1;
+    min-width: 0;
+
+    /* Apple's precise letter spacing for SF Pro */
+    letter-spacing: -0.016em;
+
+    /* SF Pro font stack */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+
+    /* Subtle depth with refined shadow */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+
+    /* Smooth text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Optical alignment */
+    line-height: 1.2;
+}
+
+/* Native Colors - Colored Icon on Black Surface */
+.success,
+.bluetooth-success {
+    color: #4CD964;
+    /* Apple Green */
+    /* No background override - keeps the black notch */
+}
+
+.success .icon:not(.custom-image),
+.bluetooth-success .icon:not(.custom-image) {
+    filter: drop-shadow(0 0 10px rgba(76, 217, 100, 0.45));
+    /* Subtle, refined glow */
+}
+
+.disconnect {
+    color: #FF3B30;
+    /* Apple Red */
+}
+
+.disconnect .icon:not(.custom-image) {
+    filter: drop-shadow(0 0 10px rgba(255, 59, 48, 0.45));
+}
+
+.error {
+    color: #FF3B30;
+}
+
+.error .icon:not(.custom-image) {
+    filter: drop-shadow(0 0 10px rgba(255, 59, 48, 0.45));
+}
+
+
+.info {
+    color: #0A84FF;
+    /* Apple Blue */
+}
+
+.info .icon:not(.custom-image) {
+    filter: drop-shadow(0 0 10px rgba(10, 132, 255, 0.45));
+}
+
+.warning,
+.reconnecting {
+    color: #FFD60A;
+    /* Apple Yellow */
+}
+
+.warning .icon:not(.custom-image),
+.reconnecting .icon:not(.custom-image) {
+    filter: drop-shadow(0 0 10px rgba(255, 214, 10, 0.45));
+}
+
+/* --- Icon Animations --- */
+
+/* 1. Pop In (Success/Connect) - Punchy & Fluid */
+@keyframes icon-pop {
+    0% {
+        transform: scale(0.4) rotate(-15deg);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.25) rotate(5deg);
+        opacity: 1;
+    }
+
+    /* Overshoot */
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* 2. Shake (Error/Disconnect) - Noticeable but Smooth */
+@keyframes icon-shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-4px);
+    }
+
+    40% {
+        transform: translateX(4px);
+    }
+
+    60% {
+        transform: translateX(-2px);
+    }
+
+    80% {
+        transform: translateX(2px);
+    }
+}
+
+/* 3. Bluetooth Pulse (Breathing) */
+@keyframes bt-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 4. Soft Pulse - Gentle breathing effect */
+@keyframes icon-pulse-soft {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 0.95;
+    }
+}
+
+/* 5. Subtle Bounce - Playful vertical bounce */
+@keyframes icon-bounce-subtle {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-6px);
+    }
+
+    50% {
+        transform: translateY(0);
+    }
+
+    75% {
+        transform: translateY(-3px);
+    }
+}
+
+/* 6. Smooth Spin - Single elegant rotation */
+@keyframes icon-spin-smooth {
+    0% {
+        transform: rotate(0deg) scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+        opacity: 1;
+    }
+}
+
+/* 7. Wobble - Playful but sleek wobble */
+@keyframes icon-wobble {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    15% {
+        transform: rotate(-8deg);
+    }
+
+    30% {
+        transform: rotate(8deg);
+    }
+
+    45% {
+        transform: rotate(-5deg);
+    }
+
+    60% {
+        transform: rotate(5deg);
+    }
+
+    75% {
+        transform: rotate(-2deg);
+    }
+
+    90% {
+        transform: rotate(2deg);
+    }
+}
+
+/* 8. Fade In - Simple elegant fade */
+@keyframes icon-fade {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 9. Slide Down - Smooth drop-in */
+@keyframes icon-slide-down {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* Apply Animations when Expanded */
+.notch.expanded .icon svg,
+.notch.expanded .icon img {
+    /* Punchy spring entry */
+    animation: icon-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both;
+}
+
+/* Bluetooth Specific: Pop THEN Pulse */
+.notch.expanded.bluetooth-success .icon svg,
+.notch.expanded.bluetooth-success .icon img {
+    animation:
+        icon-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both,
+        bt-pulse 2s ease-in-out 0.7s infinite;
+    /* Start pulse after pop finishes */
+}
+
+/* Specific Overrides */
+.notch.expanded.disconnect .icon svg,
+.notch.expanded.disconnect .icon img,
+.notch.expanded.error .icon svg,
+.notch.expanded.error .icon img {
+    /* Clear warning shake */
+    animation: icon-shake 0.5s ease-in-out 0.1s both;
+}
+
+
+
+/* --- Custom Animation Classes --- */
+/* These override the default type-based animations when specified */
+
+.notch.expanded .icon.animate-pulse svg,
+.notch.expanded .icon.animate-pulse img {
+    animation: icon-pulse-soft 2s ease-in-out 0.1s infinite;
+}
+
+.notch.expanded .icon.animate-bounce svg,
+.notch.expanded .icon.animate-bounce img {
+    animation: icon-bounce-subtle 1s ease-in-out 0.1s both;
+}
+
+.notch.expanded .icon.animate-spin svg,
+.notch.expanded .icon.animate-spin img {
+    animation: icon-spin-smooth 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.notch.expanded .icon.animate-wobble svg,
+.notch.expanded .icon.animate-wobble img {
+    animation: icon-wobble 0.8s ease-in-out 0.1s both;
+}
+
+.notch.expanded .icon.animate-fade svg,
+.notch.expanded .icon.animate-fade img {
+    animation: icon-fade 0.6s ease-out 0.1s both;
+}
+
+.notch.expanded .icon.animate-slide svg,
+.notch.expanded .icon.animate-slide img {
+    animation: icon-slide-down 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.notch.expanded .icon.no-animation svg,
+.notch.expanded .icon.no-animation img {
+    animation: none !important;
+}
