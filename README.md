@@ -35,6 +35,9 @@
 
 ## Features
 
+![CleanShot 2025-12-07 at 23 45 47](https://github.com/user-attachments/assets/949e00b2-1168-4d6a-b916-30144b13e493)
+
+
 -   **Hardware Notch Integration**: Automatically detects and aligns with the MacBook notch.
 -   **Robust Sizing**:
     -   **Dynamic Mode**: Expands fluidly to fit content (icon + text) while maintaining perfect optical alignment.
